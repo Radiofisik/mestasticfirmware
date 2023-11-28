@@ -14,6 +14,7 @@
 #endif
 #include "mqtt/JSON.h"
 #include <assert.h>
+#include "meshtastic/pir.pb.h"
 
 const int reconnectMax = 5;
 
@@ -265,7 +266,7 @@ void MQTT::reconnect()
         }
 #ifdef HAS_NETWORKING
         // Defaults
-        int serverPort = 1883;
+        int serverPort = 8883;
         const char *serverAddr = default_mqtt_address;
         const char *mqttUsername = default_mqtt_username;
         const char *mqttPassword = default_mqtt_password;
@@ -655,6 +656,20 @@ std::string MQTT::meshPacketToJson(meshtastic_MeshPacket *mp)
                 jsonObj["payload"] = new JSONValue(msgPayload);
             } else {
                 LOG_ERROR("Error decoding protobuf for position message!\n");
+            }
+            break;
+        }
+        case meshtastic_PortNum_PIR_SENSOR_APP: {
+            msgType = "pir";
+            meshtastic_PirData scratch;
+            meshtastic_PirData *decoded = NULL;
+            memset(&scratch, 0, sizeof(scratch));
+            if (pb_decode_from_bytes(mp->decoded.payload.bytes, mp->decoded.payload.size, &meshtastic_PirData_msg, &scratch)) {
+                decoded = &scratch;
+                msgPayload["on"] = new JSONValue(decoded->value);
+                jsonObj["payload"] = new JSONValue(msgPayload);
+            } else {
+                LOG_ERROR("Error decoding protobuf for PIR message!\n");
             }
             break;
         }

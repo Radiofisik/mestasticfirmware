@@ -17,6 +17,7 @@
 #include "modules/TextMessageModule.h"
 #include "modules/TraceRouteModule.h"
 #include "modules/WaypointModule.h"
+#include "modules/PirSensorModule.h"
 #if HAS_TELEMETRY
 #include "modules/Telemetry/DeviceTelemetry.h"
 #endif
@@ -55,6 +56,8 @@ void setupModules()
         traceRouteModule = new TraceRouteModule();
         neighborInfoModule = new NeighborInfoModule();
         detectionSensorModule = new DetectionSensorModule();
+        pirSensorModule = new PirSensorModule();
+
 
         // Note: if the rest of meshtastic doesn't need to explicitly use your module, you do not need to assign the instance
         // to a global variable.
