@@ -31,6 +31,7 @@
 #include <Throttle.h>
 #include <assert.h>
 #include <utility>
+#include "meshtastic/pir.pb.h"
 
 #include <IPAddress.h>
 #if defined(ARCH_PORTDUINO)

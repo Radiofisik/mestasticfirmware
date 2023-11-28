@@ -3,6 +3,7 @@
 #include "JSON.h"
 #include "NodeDB.h"
 #include "mesh/generated/meshtastic/mqtt.pb.h"
+#include "mesh/generated/meshtastic/pir.pb.h"
 #include "mesh/generated/meshtastic/telemetry.pb.h"
 #include "modules/RoutingModule.h"
 #include <DebugConfiguration.h>
@@ -270,6 +271,20 @@ std::string MeshPacketSerializer::JsonSerialize(const meshtastic_MeshPacket *mp,
                 msgPayload["locked_to"] = new JSONValue((unsigned int)decoded->locked_to);
                 msgPayload["latitude_i"] = new JSONValue((int)decoded->latitude_i);
                 msgPayload["longitude_i"] = new JSONValue((int)decoded->longitude_i);
+                jsonObj["payload"] = new JSONValue(msgPayload);
+            } else if (shouldLog) {
+                LOG_ERROR(errStr, msgType.c_str());
+            }
+            break;
+        }
+        case meshtastic_PortNum_PIR_SENSOR_APP: {
+            msgType = "pir";
+            meshtastic_PirData scratch;
+            meshtastic_PirData *decoded = NULL;
+            memset(&scratch, 0, sizeof(scratch));
+            if (pb_decode_from_bytes(mp->decoded.payload.bytes, mp->decoded.payload.size, &meshtastic_PirData_msg, &scratch)) {
+                decoded = &scratch;
+                msgPayload["on"] = new JSONValue(decoded->value);
                 jsonObj["payload"] = new JSONValue(msgPayload);
             } else if (shouldLog) {
                 LOG_ERROR(errStr, msgType.c_str());

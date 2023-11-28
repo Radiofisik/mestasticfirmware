@@ -51,6 +51,7 @@
 #include "modules/StoreForwardModule.h"
 #endif
 #endif
+#include "modules/PirSensorModule.h"
 #if HAS_TELEMETRY
 #include "modules/Telemetry/DeviceTelemetry.h"
 #endif
@@ -143,6 +144,7 @@ void setupModules()
         neighborInfoModule = new NeighborInfoModule();
     }
 #endif
+    pirSensorModule = new PirSensorModule();
 #if !MESHTASTIC_EXCLUDE_DETECTIONSENSOR
     if (moduleConfig.has_detection_sensor && moduleConfig.detection_sensor.enabled) {
         detectionSensorModule = new DetectionSensorModule();
