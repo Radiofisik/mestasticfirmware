@@ -1,3 +1,4 @@
+#ifdef PIR_SENDER
 #include "PirSensorModule.h"
 #include "MeshService.h"
 #include "NodeDB.h"
@@ -85,3 +86,4 @@ bool PirSensorModule::handleReceivedProtobuf(const meshtastic_MeshPacket &mp, me
     LOG_DEBUG("PIR did handleReceived\n");
     return false; // Let others look at this message also if they want
 }
+#endif // PIR_SENDER

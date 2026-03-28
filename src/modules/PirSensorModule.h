@@ -1,4 +1,6 @@
 #pragma once
+
+#ifdef PIR_SENDER
 #include "ProtobufModule.h"
 #include "../mesh/generated/meshtastic/pir.pb.h"
 
@@ -25,3 +27,4 @@ class PirSensorModule : public ProtobufModule<meshtastic_PirData>, private concu
 };
 
 extern PirSensorModule *pirSensorModule;
+#endif // PIR_SENDER
