@@ -1,5 +1,6 @@
 #ifdef PIR_SENDER
 #include "PirSensorModule.h"
+#include "Default.h"
 #include "MeshService.h"
 #include "NodeDB.h"
 #include "PowerFSM.h"
@@ -26,7 +27,7 @@ int32_t PirSensorModule::runOnce()
         return DELAYED_INTERVAL;
     }
 
-    if ((millis() - lastSentToMesh) >= getConfiguredOrDefaultMs(DEBOUNCE)){
+    if ((millis() - lastSentToMesh) >= Default::getConfiguredOrDefaultMs(DEBOUNCE)){
         if(hasDetectionEvent()) {
             moveDetected = true;
             sendDetectionMessage();
@@ -54,7 +55,7 @@ void PirSensorModule::sendDetectionMessage()
     // p->which_payload_variant = meshtastic_MeshPacket_decoded_tag;
     // LOG_INFO("PIR Sending message id=%d, dest=%x, msg=%.*s\n", p->id, p->to, p->decoded.payload.size, p->decoded.payload.bytes);
     lastSentToMesh = millis();
-    service.sendToMesh(p);
+    service->sendToMesh(p);
 }
 
 void PirSensorModule::sendNoDetectionMessage()
@@ -66,7 +67,7 @@ void PirSensorModule::sendNoDetectionMessage()
     p->to = NODENUM_BROADCAST;
     p->decoded.want_response = false;
     p->want_ack = false;
-    service.sendToMesh(p);
+    service->sendToMesh(p);
 }
 
 bool PirSensorModule::hasDetectionEvent()
